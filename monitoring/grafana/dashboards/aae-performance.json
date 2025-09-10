@@ -1,0 +1,197 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "aae-performance",
+    "title": "AAEConnect Performance Dashboard",
+    "tags": ["aaeconnect", "performance", "bmad-method"],
+    "timezone": "Asia/Bangkok",
+    "schemaVersion": 30,
+    "version": 1,
+    "refresh": "5s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "annotations": {
+      "list": [
+        {
+          "name": "AAE Deployments",
+          "datasource": "Prometheus",
+          "enable": true,
+          "query": "deployment_status{company=\"Advanced ID Asia Engineering\"}"
+        }
+      ]
+    },
+    "panels": [
+      {
+        "id": 1,
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+        "type": "graph",
+        "title": "Message Latency (Target: <25ms)",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "aaeconnect_message_latency_ms",
+            "legendFormat": "Latency",
+            "refId": "A"
+          }
+        ],
+        "thresholds": [
+          { "value": 25, "color": "red", "fill": true, "line": true }
+        ],
+        "yaxes": [
+          { "format": "ms", "label": "Latency (ms)", "min": 0, "max": 50 }
+        ]
+      },
+      {
+        "id": 2,
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+        "type": "graph",
+        "title": "Concurrent Users (Target: 1000+)",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "aaeconnect_concurrent_users",
+            "legendFormat": "Active Users",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          { "format": "short", "label": "Users", "min": 0 }
+        ]
+      },
+      {
+        "id": 3,
+        "gridPos": { "h": 8, "w": 8, "x": 0, "y": 8 },
+        "type": "stat",
+        "title": "Current Performance Status",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "aaeconnect_performance_score",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "area",
+          "orientation": "auto",
+          "textMode": "value_and_name",
+          "colorMode": "background",
+          "reduceOptions": {
+            "calcs": ["lastNotNull"]
+          }
+        },
+        "thresholds": {
+          "mode": "absolute",
+          "steps": [
+            { "color": "red", "value": 0 },
+            { "color": "yellow", "value": 80 },
+            { "color": "green", "value": 95 }
+          ]
+        }
+      },
+      {
+        "id": 4,
+        "gridPos": { "h": 8, "w": 8, "x": 8, "y": 8 },
+        "type": "gauge",
+        "title": "Memory Usage per Client (Target: <25MB)",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "aaeconnect_memory_per_client_mb",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showThresholdLabels": true,
+          "showThresholdMarkers": true
+        },
+        "thresholds": {
+          "mode": "absolute",
+          "steps": [
+            { "color": "green", "value": 0 },
+            { "color": "yellow", "value": 20 },
+            { "color": "red", "value": 25 }
+          ]
+        },
+        "max": 50,
+        "unit": "decmbytes"
+      },
+      {
+        "id": 5,
+        "gridPos": { "h": 8, "w": 8, "x": 16, "y": 8 },
+        "type": "stat",
+        "title": "BMAD Method Status",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "bmad_agents_active",
+            "legendFormat": "Active Agents",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "none",
+          "colorMode": "value",
+          "orientation": "horizontal",
+          "textMode": "value_and_name",
+          "reduceOptions": {
+            "calcs": ["lastNotNull"]
+          }
+        },
+        "thresholds": {
+          "mode": "absolute",
+          "steps": [
+            { "color": "red", "value": 0 },
+            { "color": "yellow", "value": 20 },
+            { "color": "green", "value": 25 }
+          ]
+        }
+      },
+      {
+        "id": 6,
+        "gridPos": { "h": 8, "w": 24, "x": 0, "y": 16 },
+        "type": "table",
+        "title": "AAE Department Performance Metrics",
+        "datasource": "Prometheus",
+        "targets": [
+          {
+            "expr": "aaeconnect_department_metrics",
+            "format": "table",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "showHeader": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "custom": {
+              "align": "auto",
+              "displayMode": "auto"
+            }
+          }
+        }
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "department",
+          "type": "query",
+          "datasource": "Prometheus",
+          "query": "label_values(aaeconnect_department_metrics, department)",
+          "multi": true,
+          "includeAll": true,
+          "current": {
+            "text": "All",
+            "value": "$__all"
+          }
+        }
+      ]
+    }
+  },
+  "overwrite": true,
+  "folderId": 0,
+  "message": "AAEConnect Performance Dashboard - Advanced ID Asia Engineering Co.,Ltd"
+}

@@ -1,0 +1,69 @@
+[package]
+name = "aaeconnect-desktop"
+version = "1.0.0"
+description = "AAEConnect Desktop - Native Performance Enterprise Communication"
+authors = ["AAEConnect Desktop Team <desktop@aae.co.th>"]
+license = "Proprietary"
+repository = "https://github.com/Dry1ceD7/AAEConnect"
+edition = "2021"
+rust-version = "1.70"
+
+# Optimize for native performance and small binary size
+[profile.release]
+panic = "abort"
+codegen-units = 1
+lto = true
+strip = true
+opt-level = "s"
+
+[build-dependencies]
+tauri-build = { version = "1.0", features = [] }
+
+[dependencies]
+# Tauri Core
+tauri = { version = "1.0", features = ["api-all", "system-tray", "updater"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# System Integration
+tokio = { version = "1", features = ["macros", "rt-multi-thread"] }
+reqwest = { version = "0.11", features = ["json", "rustls-tls"] }
+
+# WebSocket & Real-time Communication  
+tokio-tungstenite = { version = "0.20", features = ["native-tls"] }
+url = "2.4"
+
+# Matrix Protocol E2E Encryption
+matrix-sdk = { version = "0.7", features = ["e2e-encryption", "sso-login"] }
+
+# Native System Features
+notify = "6.0"              # File system watching
+clipboard = "0.5"           # Clipboard access
+keybd_event = "0.1"        # Keyboard shortcuts
+screenshots = "0.3"        # Screen capture
+dirs = "5.0"               # Standard directories
+
+# Performance & Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+anyhow = "1.0"
+thiserror = "1.0"
+
+# AAE-specific Features
+uuid = { version = "1.0", features = ["v4"] }
+chrono = { version = "0.4", features = ["serde"] }
+
+[features]
+# This feature is used for production builds where `devPath` points to the filesystem
+# DO NOT remove this
+custom-protocol = ["tauri/custom-protocol"]
+
+# AAE Enterprise Features
+default = ["desktop-native", "matrix-encryption", "aae-integration"]
+
+desktop-native = []         # Native desktop integration
+matrix-encryption = []      # Matrix E2E encryption  
+aae-integration = []        # AAE corporate features
+performance-monitoring = [] # Real-time performance metrics
+cad-file-support = []      # CAD file preview and annotation
+multi-window = []          # Multi-window productivity features

@@ -1,0 +1,99 @@
+{
+  "name": "aaeconnect-desktop",
+  "version": "1.0.0",
+  "description": "AAEConnect Tauri Desktop Application - Native Performance with 90% Smaller Memory Footprint",
+  "type": "module",
+  "scripts": {
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "tauri:build:debug": "tauri build --debug",
+    "dev": "npm run tauri:dev",
+    "build": "npm run tauri:build",
+    "test": "vitest",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "keywords": [
+    "aaeconnect",
+    "tauri",
+    "desktop",
+    "enterprise-communication",
+    "rust",
+    "svelte",
+    "native-performance",
+    "automotive",
+    "thailand"
+  ],
+  "author": "AAEConnect Desktop Team <desktop@aae.co.th>",
+  "license": "Proprietary",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dry1ceD7/AAEConnect.git",
+    "directory": "desktop"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^1.5.1",
+    "@tauri-apps/plugin-notification": "^1.0.0",
+    "@tauri-apps/plugin-fs": "^1.0.0",
+    "@tauri-apps/plugin-window": "^1.0.0",
+    "@tauri-apps/plugin-clipboard": "^1.0.0",
+    "svelte": "^4.2.8",
+    "ws": "^8.14.2",
+    "matrix-js-sdk": "^29.0.0"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^2.5.3",
+    "@tauri-apps/cli": "^1.5.6",
+    "@types/ws": "^8.5.10",
+    "@typescript-eslint/eslint-plugin": "^6.13.1",
+    "@typescript-eslint/parser": "^6.13.1",
+    "eslint": "^8.55.0",
+    "eslint-plugin-svelte": "^2.35.1",
+    "prettier": "^3.1.0",
+    "prettier-plugin-svelte": "^3.1.2",
+    "svelte-check": "^3.6.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.2",
+    "vite": "^4.5.0",
+    "vitest": "^1.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "aae": {
+    "desktop": {
+      "features": [
+        "native_performance",
+        "multi_window_support",
+        "system_notifications",
+        "file_system_access",
+        "screen_sharing",
+        "meeting_controls",
+        "cad_file_preview",
+        "offline_messaging"
+      ],
+      "performance_targets": {
+        "memory_footprint_mb": 25,
+        "startup_time_ms": 500,
+        "ui_fps": 120,
+        "native_integration": true
+      },
+      "security": {
+        "matrix_e2e_encryption": true,
+        "hardware_acceleration": true,
+        "secure_storage": true,
+        "certificate_pinning": true
+      }
+    },
+    "branding": {
+      "primary_color": "#00BCD4",
+      "secondary_color": "#0097A7",
+      "accent_color": "#00E5FF",
+      "theme": "cyan-light-blue-modern",
+      "company": "Advanced ID Asia Engineering Co.,Ltd",
+      "location": "Chiang Mai, Thailand"
+    }
+  }
+}

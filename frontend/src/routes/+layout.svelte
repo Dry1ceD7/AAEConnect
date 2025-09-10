@@ -60,7 +60,7 @@
           <!-- Performance indicator -->
           <div class="hidden md:flex items-center space-x-2 text-xs">
             <span class="text-aae-gray">🚀 BMAD Agents: 25 Active</span>
-            <span class="text-aae-gray">📊 Target: <25ms</span>
+            <span class="text-aae-gray">📊 Target: &lt;25ms</span>
           </div>
         </div>
       </div>

@@ -98,8 +98,8 @@ AAEConnect is our next-generation enterprise communication platform, designed sp
 ### For AAE Employees
 
 1. **Access the Platform**
-   - Web: `http://aaeconnect.local:5173`
-   - Backend API: `http://aaeconnect.local:3000`
+   - Web: `http://localhost:5176`
+   - Backend API: `http://localhost:3000`
 
 2. **Department Channels**
    - Join your department-specific channels

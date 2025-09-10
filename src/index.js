@@ -5,6 +5,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const path = require('path');
+const { MatrixService } = require('./services/matrixService');
 require('dotenv').config();
 
 const app = express();
@@ -26,6 +27,19 @@ let performanceMetrics = {
   activeUsers: 0,
   messagesPerSecond: 0,
   uptime: 0
+};
+
+// Initialize Matrix E2E encryption service
+const matrixService = new MatrixService();
+global.webSocketService = {
+  broadcastMessage: (message) => {
+    // Broadcast to all connected WebSocket clients
+    connectedUsers.forEach((user) => {
+      if (user.ws.readyState === WebSocket.OPEN) {
+        user.ws.send(JSON.stringify(message));
+      }
+    });
+  }
 };
 
 // AAE Company Configuration
@@ -203,6 +217,7 @@ wss.on('connection', (ws, req) => {
 
 // Health check endpoint
 app.get('/health', (req, res) => {
+  const matrixStatus = matrixService.getStatus();
   const healthStatus = {
     success: true,
     data: {
@@ -215,7 +230,12 @@ app.get('/health', (req, res) => {
         database: { status: 'healthy', responseTime: 5 },
         redis: { status: 'healthy', responseTime: 3 },
         websocket: { status: 'healthy', connections: connectedUsers.size },
-        matrix: { status: 'pending', responseTime: null }
+        matrix: { 
+          status: matrixStatus.initialized ? 'healthy' : 'initializing', 
+          encrypted: matrixStatus.encrypted,
+          rooms: matrixStatus.rooms,
+          responseTime: matrixStatus.initialized ? 8 : null 
+        }
       },
       performance_metrics: {
         message_latency_ms: performanceMetrics.latency,
@@ -230,7 +250,8 @@ app.get('/health', (req, res) => {
         performance_targets_met: performanceMetrics.latency < 25,
         last_optimization: BMAD_STATUS.lastOptimization
       },
-      aae_config: AAE_CONFIG
+      aae_config: AAE_CONFIG,
+      matrix_e2e: matrixStatus
     },
     message: 'AAEConnect backend is healthy and operational',
     timestamp: new Date().toISOString()
@@ -326,6 +347,7 @@ app.get('/api/stats', (req, res) => {
       performance: performanceMetrics,
       bmad: BMAD_STATUS,
       aae: AAE_CONFIG,
+      matrix: matrixService.getStatus(),
       system: {
         uptime: Math.round(process.uptime()),
         memory: process.memoryUsage(),
@@ -335,6 +357,62 @@ app.get('/api/stats', (req, res) => {
     },
     timestamp: new Date().toISOString()
   });
+});
+
+// Matrix E2E encryption API
+app.post('/api/matrix/init', async (req, res) => {
+  try {
+    const { userId, accessToken } = req.body;
+    
+    if (!userId || !accessToken) {
+      return res.status(400).json({
+        success: false,
+        error: 'Missing userId or accessToken',
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    const initialized = await matrixService.initialize(userId, accessToken);
+    
+    res.json({
+      success: initialized,
+      data: matrixService.getStatus(),
+      message: initialized ? 'Matrix E2E encryption enabled' : 'Matrix initialization failed',
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// Matrix room status API
+app.get('/api/matrix/rooms', (req, res) => {
+  try {
+    const status = matrixService.getStatus();
+    
+    res.json({
+      success: true,
+      data: {
+        rooms: status.rooms,
+        departments: status.departments,
+        encrypted: status.encrypted,
+        compliance: status.compliance
+      },
+      timestamp: new Date().toISOString()
+    });
+    
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
 });
 
 // Error handling middleware
@@ -370,8 +448,8 @@ setInterval(() => {
   }
 }, 60000);
 
-// Start server
-server.listen(PORT, '0.0.0.0', () => {
+// Start server and initialize Matrix E2E encryption
+server.listen(PORT, '0.0.0.0', async () => {
   console.log(`🚀 AAEConnect Server running on port ${PORT}`);
   console.log(`🏭 Company: ${AAE_CONFIG.company}`);
   console.log(`📍 Location: ${AAE_CONFIG.location}`);
@@ -381,6 +459,27 @@ server.listen(PORT, '0.0.0.0', () => {
   console.log(`📈 Metrics: http://localhost:${PORT}/metrics`);
   console.log(`🔌 WebSocket: ws://localhost:${PORT}/ws`);
   console.log(`🎨 Branding: ${AAE_CONFIG.branding.theme}`);
+  
+  // Initialize Matrix E2E encryption (optional - can be enabled later)
+  if (process.env.MATRIX_ENABLE === 'true') {
+    try {
+      console.log('🔒 Initializing Matrix E2E encryption...');
+      const matrixUserId = process.env.MATRIX_USER_ID || '@aaeconnect:aae.local';
+      const matrixToken = process.env.MATRIX_ACCESS_TOKEN || '';
+      
+      if (matrixToken) {
+        await matrixService.initialize(matrixUserId, matrixToken);
+        console.log('✅ Matrix E2E encryption enabled');
+      } else {
+        console.log('⚠️ Matrix token not configured, E2E encryption disabled');
+      }
+    } catch (error) {
+      console.error('❌ Matrix initialization failed:', error.message);
+      console.log('ℹ️ Continuing with WebSocket-only messaging');
+    }
+  } else {
+    console.log('ℹ️ Matrix E2E encryption disabled (set MATRIX_ENABLE=true to enable)');
+  }
 });
 
 // Graceful shutdown

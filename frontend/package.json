@@ -25,6 +25,7 @@
   "license": "Proprietary",
   "dependencies": {
     "@sveltejs/kit": "1.30.4",
+    "matrix-js-sdk": "^38.1.0",
     "svelte": "4.2.8"
   },
   "devDependencies": {

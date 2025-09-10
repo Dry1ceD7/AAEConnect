@@ -1,0 +1,114 @@
+# AAEConnect Production Prometheus Configuration
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    cluster: 'aaeconnect-prod'
+    company: 'Advanced ID Asia Engineering'
+    environment: 'production'
+
+# AAE-specific alerting rules
+rule_files:
+  - "aae_alerts.yml"
+
+# Alert manager configuration
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets:
+          - alertmanager:9093
+
+# Scrape configurations for AAEConnect services
+scrape_configs:
+  # Backend Rust service metrics
+  - job_name: 'aaeconnect-backend'
+    static_configs:
+      - targets: ['backend:3000']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+    scrape_timeout: 5s
+    honor_labels: true
+    params:
+      format: ['prometheus']
+
+  # Frontend performance metrics
+  - job_name: 'aaeconnect-frontend'
+    static_configs:
+      - targets: ['frontend:5173']
+    metrics_path: '/metrics'
+    scrape_interval: 15s
+
+  # PostgreSQL database metrics
+  - job_name: 'postgres'
+    static_configs:
+      - targets: ['postgres:5432']
+    scrape_interval: 30s
+
+  # Redis cluster metrics
+  - job_name: 'redis-cluster'
+    static_configs:
+      - targets: ['redis-cluster:7000']
+    scrape_interval: 15s
+
+  # NGINX proxy metrics
+  - job_name: 'nginx'
+    static_configs:
+      - targets: ['nginx:9113']
+    scrape_interval: 30s
+
+  # Matrix Synapse metrics
+  - job_name: 'matrix-synapse'
+    static_configs:
+      - targets: ['matrix-synapse:9000']
+    scrape_interval: 30s
+
+  # MinIO storage metrics
+  - job_name: 'minio'
+    static_configs:
+      - targets: ['minio:9000']
+    metrics_path: '/minio/v2/metrics/cluster'
+    scrape_interval: 30s
+
+  # Node exporter for system metrics
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+    scrape_interval: 15s
+
+  # cAdvisor for container metrics
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets: ['cadvisor:8080']
+    scrape_interval: 15s
+
+  # Custom AAE performance metrics
+  - job_name: 'aae-performance'
+    static_configs:
+      - targets: ['backend:3000']
+    metrics_path: '/aae/metrics'
+    scrape_interval: 5s
+    params:
+      module: ['aae_performance']
+
+# Performance monitoring specific to AAE requirements
+remote_write:
+  - url: "http://victoria-metrics:8428/api/v1/write"
+    queue_config:
+      max_samples_per_send: 10000
+      batch_send_deadline: 5s
+      min_shards: 1
+      max_shards: 200
+
+# Storage configuration for high performance
+storage:
+  tsdb:
+    path: /prometheus
+    retention.time: 30d
+    retention.size: 50GB
+    wal-compression: true
+
+# Query configuration for performance
+query:
+  timeout: 2m
+  max_concurrent: 20
+  max_samples: 50000000

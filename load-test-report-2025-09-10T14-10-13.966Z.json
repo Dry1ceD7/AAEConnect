@@ -1,0 +1,25 @@
+{
+  "duration_seconds": 35.1141025,
+  "connections": {
+    "attempted": 100,
+    "successful": 100,
+    "failed": 0,
+    "success_rate": 1
+  },
+  "messages": {
+    "sent": 55426,
+    "received": 54833,
+    "failed": 0,
+    "success_rate": 0.9893010500487136
+  },
+  "latency": {
+    "average_ms": "1757513395255.74",
+    "p95_ms": "1757513410324.00",
+    "samples": 54833
+  },
+  "errors": 0,
+  "throughput": {
+    "messages_per_second": "1578.45",
+    "connections_per_second": "2.85"
+  }
+}

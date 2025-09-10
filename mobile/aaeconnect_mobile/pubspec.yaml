@@ -1,0 +1,158 @@
+name: aaeconnect_mobile
+description: AAEConnect Mobile - High-Performance Enterprise Communication for Advanced ID Asia Engineering Co.,Ltd
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: ">=3.10.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  
+  # Core Dependencies
+  cupertino_icons: ^1.0.2
+  
+  # Material Design 3 with AAE Branding
+  material_color_utilities: ^0.5.0
+  dynamic_color: ^1.6.6
+  
+  # State Management
+  riverpod: ^2.4.5
+  flutter_riverpod: ^2.4.5
+  
+  # Networking & WebSockets
+  web_socket_channel: ^2.4.0
+  http: ^1.1.0
+  dio: ^5.3.2
+  
+  # Matrix E2E Encryption
+  matrix: ^0.22.0
+  olm: ^1.3.2
+  
+  # Local Storage & Security
+  flutter_secure_storage: ^9.0.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  
+  # Push Notifications
+  firebase_messaging: ^14.7.6
+  firebase_core: ^2.20.0
+  flutter_local_notifications: ^15.1.2
+  
+  # UI & UX Enhancements
+  flutter_svg: ^2.0.7
+  cached_network_image: ^3.3.0
+  image_picker: ^1.0.4
+  file_picker: ^6.1.1
+  
+  # Internationalization (Thai/English)
+  flutter_localizations:
+    sdk: flutter
+  intl: any
+  
+  # Utils & Performance
+  flutter_launcher_icons: ^0.13.1
+  path: ^1.8.3
+  uuid: ^4.1.0
+  
+  # AAE-Specific Features
+  qr_code_scanner: ^1.0.1
+  qr_flutter: ^4.1.0
+  url_launcher: ^6.2.1
+  
+  # Development & Debugging
+  flutter_logs: ^2.1.12
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  
+  # Code Generation
+  build_runner: ^2.4.7
+  hive_generator: ^2.0.1
+  json_annotation: ^4.8.1
+  json_serializable: ^6.7.1
+  
+  # Linting & Code Quality
+  flutter_lints: ^3.0.0
+  
+  # Testing
+  mockito: ^5.4.2
+  integration_test:
+    sdk: flutter
+
+# AAE Branding Configuration
+flutter:
+  uses-material-design: true
+  
+  # AAE Brand Assets
+  assets:
+    - assets/images/aae_logo.png
+    - assets/images/aae_logo_white.png
+    - assets/images/splash_logo.png
+    - assets/icons/
+    - assets/sounds/notification.mp3
+    - assets/localization/
+  
+  # Custom Fonts for AAE Corporate Identity
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+    - family: NotoSansThai
+      fonts:
+        - asset: assets/fonts/NotoSansThai-Regular.ttf
+        - asset: assets/fonts/NotoSansThai-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/NotoSansThai-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/NotoSansThai-Bold.ttf
+          weight: 700
+
+# App Icons Configuration
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/aae_app_icon.png"
+  min_sdk_android: 21
+  web:
+    generate: true
+    image_path: "assets/images/aae_app_icon.png"
+    background_color: "#00BCD4"
+    theme_color: "#00BCD4"
+  windows:
+    generate: true
+    image_path: "assets/images/aae_app_icon.png"
+    icon_size: 48
+  macos:
+    generate: true
+    image_path: "assets/images/aae_app_icon.png"
+
+# Performance & Build Configuration  
+android:
+  compileSdkVersion: 34
+  minSdkVersion: 21
+  targetSdkVersion: 34
+  
+ios:
+  deployment_target: 12.0
+
+# AAE Corporate Metadata
+publish_to: 'none' # Private corporate app
+
+flutter_intl:
+  enabled: true
+  main_locale: en
+  arb_dir: lib/l10n
+  output_dir: lib/generated
+  
+# Development Configuration
+dev_dependencies_overrides:
+  # Keep dependencies locked for corporate compliance

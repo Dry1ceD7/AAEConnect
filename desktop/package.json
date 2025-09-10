@@ -34,10 +34,6 @@
   },
   "dependencies": {
     "@tauri-apps/api": "^1.5.1",
-    "@tauri-apps/plugin-notification": "^1.0.0",
-    "@tauri-apps/plugin-fs": "^1.0.0",
-    "@tauri-apps/plugin-window": "^1.0.0",
-    "@tauri-apps/plugin-clipboard": "^1.0.0",
     "svelte": "^4.2.8",
     "ws": "^8.14.2",
     "matrix-js-sdk": "^29.0.0"

@@ -146,10 +146,14 @@ class VirtualUser {
         
         this.ws.on('message', (data) => {
           try {
-            const message = JSON.parse(data);
+            const message = JSON.parse(data.toString());
             if (message.echo && message.timestamp) {
-              const latency = Date.now() - parseInt(message.timestamp);
-              this.metrics.recordMessage(true, latency);
+              const sentTime = parseInt(message.timestamp);
+              const latency = Date.now() - sentTime;
+              // Only record reasonable latencies (< 10 seconds)
+              if (latency > 0 && latency < 10000) {
+                this.metrics.recordMessage(true, latency);
+              }
             }
           } catch (e) {
             // Ignore parse errors for non-echo messages

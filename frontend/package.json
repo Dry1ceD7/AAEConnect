@@ -24,9 +24,8 @@
   "author": "AAEConnect Frontend Team",
   "license": "Proprietary",
   "dependencies": {
-    "@sveltejs/adapter-node": "^1.3.1",
+    "@sveltejs/adapter-node": "^4.0.1",
     "@sveltejs/kit": "1.30.4",
-    "matrix-js-sdk": "^38.1.0",
     "svelte": "4.2.8"
   },
   "devDependencies": {

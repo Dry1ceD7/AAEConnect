@@ -1,0 +1,20 @@
+# Test environment Dockerfile
+FROM node:22-alpine
+
+WORKDIR /app
+
+# Install dependencies
+COPY package*.json ./
+RUN npm ci
+
+# Copy source and test files
+COPY . .
+
+# Install BMAD Method for testing
+RUN npx bmad-method install --full --directory . --ide other
+
+# Create test directories
+RUN mkdir -p coverage reports logs
+
+# Default command runs tests
+CMD ["npm", "run", "test:coverage"]

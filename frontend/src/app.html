@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" class="h-full">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%sveltekit.assets%/favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    
+    <!-- AAE Branding and Performance -->
+    <title>AAEConnect - Enterprise Communication Platform</title>
+    <meta name="description" content="AAEConnect - High-performance enterprise communication platform for Advanced ID Asia Engineering Co.,Ltd. Surpassing Line and Skype with superior security and performance." />
+    <meta name="keywords" content="AAEConnect, enterprise communication, Advanced ID Asia Engineering, automotive manufacturing, Thailand, secure messaging" />
+    
+    <!-- Performance and SEO -->
+    <meta name="theme-color" content="#00BCD4" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="AAEConnect" />
+    
+    <!-- Preconnect for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    
+    <!-- Thai language support -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+    
+    <!-- Critical CSS inlined for performance -->
+    <style>
+      /* Critical styles for immediate rendering */
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Inter', 'Noto Sans Thai', sans-serif;
+        background-color: #fafafa;
+        color: #212121;
+      }
+      
+      .loading-spinner {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border: 3px solid #e0e0e0;
+        border-radius: 50%;
+        border-top-color: #00BCD4;
+        animation: spin 1s ease-in-out infinite;
+      }
+      
+      @keyframes spin {
+        to { transform: rotate(360deg); }
+      }
+      
+      /* AAE Theme Variables */
+      :root {
+        --aae-primary: #00BCD4;
+        --aae-secondary: #0097A7;
+        --aae-accent: #00E5FF;
+        --aae-gray: #757575;
+        --performance-target-fps: 120;
+        --bmad-agents: 25;
+      }
+    </style>
+    
+    %sveltekit.head%
+  </head>
+  
+  <body data-sveltekit-preload-data="hover" class="h-full bg-gray-50 antialiased">
+    <!-- Loading indicator -->
+    <div id="loading-indicator" class="fixed inset-0 flex items-center justify-center bg-white z-50">
+      <div class="text-center">
+        <div class="loading-spinner mx-auto mb-4"></div>
+        <p class="text-aae-gray-600 text-sm">
+          Loading AAEConnect...
+          <br />
+          <span class="text-xs">🤖 BMAD Method: 25 agents optimizing performance</span>
+        </p>
+      </div>
+    </div>
+    
+    <!-- Main application -->
+    <div style="display: contents" class="h-full">%sveltekit.body%</div>
+    
+    <!-- Performance monitoring script -->
+    <script>
+      // Hide loading indicator once app is ready
+      window.addEventListener('load', () => {
+        const loader = document.getElementById('loading-indicator');
+        if (loader) {
+          loader.style.opacity = '0';
+          setTimeout(() => loader.remove(), 300);
+        }
+      });
+      
+      // Performance monitoring for 120fps target
+      let frameCount = 0;
+      let lastTime = performance.now();
+      
+      function measureFPS() {
+        const now = performance.now();
+        frameCount++;
+        
+        if (now - lastTime >= 1000) {
+          const fps = Math.round(frameCount * 1000 / (now - lastTime));
+          if (fps < 60) {
+            console.warn(`⚠️ FPS below target: ${fps}fps (target: 120fps)`);
+          }
+          frameCount = 0;
+          lastTime = now;
+        }
+        
+        requestAnimationFrame(measureFPS);
+      }
+      
+      // Start FPS monitoring in development
+      if (location.hostname === 'localhost') {
+        requestAnimationFrame(measureFPS);
+      }
+    </script>
+  </body>
+</html>

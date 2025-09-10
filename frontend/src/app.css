@@ -1,0 +1,196 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* AAE Corporate Theme Colors */
+:root {
+  --aae-primary: #00BCD4;    /* Cyan - AAE Primary Brand Color */
+  --aae-secondary: #0097A7;  /* Dark Cyan - Secondary Brand Color */
+  --aae-accent: #00E5FF;     /* Light Cyan - Accent Color */
+  --aae-gray: #757575;       /* Professional Gray */
+  --aae-dark: #212121;       /* Dark Text */
+  --aae-light: #fafafa;      /* Light Background */
+  
+  /* Performance targets from BMAD config */
+  --performance-target-fps: 120;
+  --bmad-agents: 25;
+  --target-latency-ms: 25;
+}
+
+/* Thai Language Font Optimization */
+@font-face {
+  font-family: 'AAE Corporate';
+  src: url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap');
+  font-display: swap;
+}
+
+/* Base styles optimized for performance */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Inter', 'Noto Sans Thai', system-ui, -apple-system, sans-serif;
+  font-feature-settings: 'rlig' 1, 'calt' 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* High-performance animations for 120fps target */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    transition-duration: 0.15s;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  
+  .smooth-transition {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+  }
+}
+
+/* AAE Corporate Component Styles */
+.btn-aae-primary {
+  @apply bg-[#00BCD4] hover:bg-[#0097A7] text-white font-medium py-2 px-4 rounded-lg transition-all duration-150 shadow-sm hover:shadow-md active:scale-95;
+}
+
+.btn-aae-secondary {
+  @apply bg-white border-2 border-[#00BCD4] text-[#00BCD4] hover:bg-[#00BCD4] hover:text-white font-medium py-2 px-4 rounded-lg transition-all duration-150;
+}
+
+.card-aae {
+  @apply bg-white rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-150;
+}
+
+.input-aae {
+  @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#00BCD4] focus:border-transparent outline-none transition-all duration-150;
+}
+
+/* Thai language specific styles */
+.text-thai {
+  font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+  line-height: 1.6;
+}
+
+/* High-performance messaging interface */
+.message-container {
+  @apply flex flex-col space-y-2 p-4 max-h-screen overflow-y-auto;
+  scroll-behavior: smooth;
+  will-change: scroll-position;
+}
+
+.message-bubble {
+  @apply max-w-xs lg:max-w-md px-4 py-2 rounded-2xl shadow-sm;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.message-sent {
+  @apply bg-[#00BCD4] text-white ml-auto;
+}
+
+.message-received {
+  @apply bg-white border border-gray-200 text-gray-900;
+}
+
+/* Real-time activity indicators */
+.online-indicator {
+  @apply w-3 h-3 bg-green-500 rounded-full;
+  animation: pulse-online 2s infinite;
+}
+
+.typing-indicator {
+  @apply w-2 h-2 bg-[#00BCD4] rounded-full;
+  animation: typing-bounce 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse-online {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes typing-bounce {
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+}
+
+/* Performance monitoring styles */
+.performance-badge {
+  @apply inline-flex items-center px-2 py-1 rounded-full text-xs font-medium;
+}
+
+.performance-excellent {
+  @apply bg-green-100 text-green-800;
+}
+
+.performance-good {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.performance-poor {
+  @apply bg-red-100 text-red-800;
+}
+
+/* Accessibility improvements */
+.focus-visible {
+  @apply outline-2 outline-offset-2 outline-[#00BCD4];
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 640px) {
+  .message-bubble {
+    @apply max-w-[280px];
+  }
+  
+  .btn-aae-primary,
+  .btn-aae-secondary {
+    @apply py-3 px-6 text-base;
+  }
+}
+
+/* Print styles for documentation */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-friendly {
+    @apply bg-white text-black;
+  }
+}
+
+/* Loading states optimized for perceived performance */
+.skeleton-loader {
+  @apply animate-pulse bg-gray-200 rounded;
+}
+
+.loading-shimmer {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Custom scrollbars for better UX */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--aae-primary);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--aae-secondary);
+}

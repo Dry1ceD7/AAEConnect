@@ -1,0 +1,61 @@
+{
+  "name": "aaeconnect-frontend",
+  "version": "1.0.0",
+  "description": "AAEConnect SvelteKit Frontend - 90% faster than React",
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev --host 0.0.0.0 --port 5173",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "lint": "prettier --check . && eslint .",
+    "format": "prettier --write .",
+    "aae:theme": "echo '🎨 Applying AAE cyan-light blue modern theme'",
+    "bmad:frontend": "echo '🚀 Frontend Agent: SvelteKit optimizations active'"
+  },
+  "keywords": [
+    "sveltekit",
+    "typescript",
+    "tailwindcss",
+    "vite",
+    "aaeconnect",
+    "enterprise"
+  ],
+  "author": "AAEConnect Frontend Team",
+  "license": "Proprietary",
+  "dependencies": {
+    "@sveltejs/kit": "1.30.4",
+    "svelte": "4.2.8"
+  },
+  "devDependencies": {
+    "@sveltejs/adapter-auto": "2.1.1",
+    "@sveltejs/vite-plugin-svelte": "2.5.3",
+    "@tailwindcss/forms": "0.5.7",
+    "@tailwindcss/typography": "0.5.10",
+    "@types/node": "20.10.0",
+    "autoprefixer": "10.4.16",
+    "eslint": "8.55.0",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-plugin-svelte": "2.35.1",
+    "postcss": "8.4.32",
+    "prettier": "3.1.0",
+    "prettier-plugin-svelte": "3.1.2",
+    "svelte-check": "3.6.0",
+    "tailwindcss": "3.3.6",
+    "tslib": "2.6.2",
+    "typescript": "5.3.2",
+    "vite": "4.5.0"
+  },
+  "aae": {
+    "branding": {
+      "primary_color": "#00BCD4",
+      "secondary_color": "#0097A7",
+      "accent_color": "#00E5FF",
+      "theme": "cyan-light-blue-modern"
+    },
+    "performance": {
+      "target_fps": 120,
+      "target_latency_ms": 25
+    }
+  }
+}

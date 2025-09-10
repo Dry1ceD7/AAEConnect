@@ -1,0 +1,68 @@
+# Multi-stage build for optimized Rust backend production
+FROM rust:1.75-slim as builder
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    pkg-config \
+    libssl-dev \
+    libpq-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create app directory
+WORKDIR /app
+
+# Copy manifests
+COPY Cargo.toml Cargo.lock ./
+
+# Build dependencies (cached layer)
+RUN mkdir src && echo "fn main() {}" > src/main.rs
+RUN cargo build --release
+RUN rm -rf src
+
+# Copy source code
+COPY src ./src
+
+# Build application with optimizations
+RUN cargo build --release --bin aaeconnect-server
+
+# Runtime stage
+FROM debian:bookworm-slim as runtime
+
+# Install runtime dependencies
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    libssl3 \
+    libpq5 \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# Create non-root user for security
+RUN groupadd -r aaeconnect && useradd -r -g aaeconnect aaeconnect
+
+# Create app directory
+WORKDIR /app
+
+# Copy binary from builder stage
+COPY --from=builder /app/target/release/aaeconnect-server ./
+
+# Create necessary directories
+RUN mkdir -p logs config && \
+    chown -R aaeconnect:aaeconnect /app
+
+# Switch to non-root user
+USER aaeconnect
+
+# Expose port
+EXPOSE 3000
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=30s --retries=3 \
+    CMD curl -f http://localhost:3000/health || exit 1
+
+# Performance optimizations
+ENV RUST_ENV=production
+ENV RUST_LOG=info
+ENV RUST_BACKTRACE=0
+
+# Start the application
+CMD ["./aaeconnect-server"]
